@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "af5320bd-563f-4de9-a2a3-cb24641866a4"
+      }
+    },
+    "owner": "ebrauta"
   }
 }

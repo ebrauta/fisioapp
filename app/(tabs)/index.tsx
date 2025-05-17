@@ -1,4 +1,4 @@
-import { PatientsData } from '@/constants/API';
+import { ConsultsData, PatientsData } from '@/constants/API';
 import { Colors } from '@/constants/Colors';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 
@@ -9,6 +9,12 @@ export default function HomeScreen() {
       <Text style={styles.title}>Página Inicial</Text>
       <Text style={{ fontSize: 20, marginVertical: 20, color: Colors.darkgreen }}>
         Pacientes cadastrados no sistema: {PatientsData.length}
+      </Text>
+      <Text style={{ fontSize: 20, marginVertical: 20, color: Colors.darkgreen }}>
+        Avaliações feitas: {ConsultsData.filter((consult) => consult.type == 'evaluation').length}
+      </Text>
+      <Text style={{ fontSize: 20, marginVertical: 20, color: Colors.darkgreen }}>
+        Atendimentos feitos: {ConsultsData.filter((consult) => consult.type == 'default').length}
       </Text>
     </View>
   );

@@ -1,8 +1,9 @@
 import { ConsultsList } from '@/components/ConsultsList';
+import { FormAddPatient } from '@/components/FormAddPatient';
 import { PatientList } from '@/components/PatientList';
+import { UIButton } from '@/components/UI/Button';
 import { ConsultsData } from '@/constants/API';
 import { Colors } from '@/constants/Colors';
-import { LIST_ITEM_HEIGHT } from '@/constants/Extras';
 import { Consult } from '@/types/IConsult';
 import { Patient } from '@/types/IPatient';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ export default function PatientScreen() {
   const [showConsults, setShowConsults] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<Patient>();
   const [consults, setConsults] = useState<Consult[]>([]);
+  const [showAdd, setShowAdd] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchConsults = async () => {
@@ -37,10 +39,9 @@ export default function PatientScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Pacientes</Text>
-      <View style={styles.listView}>
-        <Text style={styles.listTitle}>Lista de Pacientes</Text>
-        <PatientList handleClick={handlePatientPress} />
-      </View>
+      <PatientList handleClick={handlePatientPress} />
+      <UIButton label='Adicionar Paciente' handleClick={() => setShowAdd(true)} />
+      {showAdd && <FormAddPatient handleClose={() => setShowAdd(false)}/>}
       {showConsults && (
         <Modal onDismiss={handleConsultPress}>
           <ConsultsList patient={selectedPatient?.name} consults={consults} handleClick={handleConsultPress} />
@@ -63,21 +64,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.darkgreen,
     marginVertical: 10,
-  },
-  listView: {
-    height: LIST_ITEM_HEIGHT * 10 + 20,
-    borderWidth: 2,
-    borderColor: Colors.darkgreen,
-    borderRadius: 8
-  },
-  listTitle: {
-    padding: 10,
-    fontStyle: 'italic',
-    fontWeight: 'bold',
-    fontSize: 20,
-    textAlign: 'center',
-    textDecorationStyle: 'double',
-    textDecorationColor: Colors.darkgreen,
-    textDecorationLine: 'underline'
-  },
+  }
 });

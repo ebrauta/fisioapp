@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { LIST_ITEM_HEIGHT } from "@/constants/Extras";
 import { Consult } from "@/types/IConsult";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { BackButton } from "./button";
+import { UIButton } from "../UI/Button";
 import { ConsultListItem } from "./item";
 
 interface ConsultListProps {
@@ -35,7 +35,7 @@ export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, ha
                     showsVerticalScrollIndicator={false}
                 />
             </View>
-            <BackButton onPress={handlePress} />
+            <UIButton label="Voltar" iconName="arrow-back-outline" handleClick={handleClick} />
         </SafeAreaView>
 
     )
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 5,
+        padding: 20
     },
     title: {
         fontSize: 24,

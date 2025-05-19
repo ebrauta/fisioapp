@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { LIST_ITEM_HEIGHT } from "@/constants/Extras";
 import { Consult } from "@/types/IConsult";
+import { useCallback } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { UIButton } from "../UI/Button";
 import { ConsultListItem } from "./item";
@@ -16,16 +17,24 @@ export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, ha
         handleClick();
     };
 
+    const renderItem = useCallback(
+        ({ item }: { item: Consult }) => <ConsultListItem consult={item} />,
+        []
+    );
+
+    const keyExtractor = useCallback(
+        (item: Consult) => item.id.toString(),
+        []
+    );
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Consultas de {patient}</Text>
-            <View style={{ maxHeight: 500 }}>
+            <View style={styles.listContainer}>
                 <FlatList
                     data={consults}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <ConsultListItem consult={item} />
-                    )}
+                    keyExtractor={keyExtractor}
+                    renderItem={renderItem}
                     style={styles.container}
                     getItemLayout={(_, index) => ({
                         length: LIST_ITEM_HEIGHT,
@@ -33,11 +42,19 @@ export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, ha
                         index,
                     })}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={
+                        <Text style={{ textAlign: "center", color: Colors.gray, marginVertical: 20 }}>
+                            Nenhuma consulta encontrada.
+                        </Text>
+                    }
                 />
             </View>
-            <UIButton label="Voltar" iconName="arrow-back-outline" handleClick={handleClick} />
+            <UIButton
+                label="Voltar"
+                iconName="arrow-back-outline"
+                handleClick={handleClick}
+            />
         </SafeAreaView>
-
     )
 }
 
@@ -57,5 +74,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Colors.darkgreen,
         marginVertical: 10,
+    },
+    listContainer: {
+        maxHeight: 500,
     },
 });

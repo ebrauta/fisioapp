@@ -29,8 +29,10 @@ export const UIButton: React.FC<ButtonProps> = ({ label, iconName, handleClick ,
 const styles = StyleSheet.create({
     button: {
         flex: 1,
+        minHeight: 50,
+        maxHeight: 50,
         margin: 5,
-        padding: 20,
+        padding: 10,
         backgroundColor: Colors.darkgreen,
         justifyContent: 'center',
         alignItems: 'center',

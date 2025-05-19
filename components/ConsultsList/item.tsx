@@ -2,20 +2,46 @@ import { Colors } from "@/constants/Colors";
 import { LIST_ITEM_HEIGHT } from "@/constants/Extras";
 import { convertDate } from "@/lib/date";
 import { Consult } from "@/types/IConsult";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 interface ConsultItemProps {
     consult: Consult;
 }
 
-export const ConsultListItem: React.FC<ConsultItemProps> = ({ consult }) => {
+export const ConsultListItem = React.memo<ConsultItemProps>(({ consult }) => {
+    const formattedDate = convertDate(consult.date ?? '');
     return (
-        <View style={stylesConsult.item}>
-            <Text style={stylesConsult.itemText}>Data: {convertDate(consult.date)}</Text>
-            {consult.type !== "default" && <Text style={stylesConsult.evaluation}>Avaliação</Text>}
+        <View
+            style={stylesConsult.item}
+            testID="consult-list-item"
+            accessibilityRole="none"
+            accessibilityLabel={`Consulta em ${formattedDate}${consult.type !== "default" ? ', Avaliação' : ''}`}
+        >
+            <Text
+                style={stylesConsult.itemText}
+                testID="consult-date"
+                accessibilityRole="text"
+                accessibilityLabel={`Data da consulta: ${formattedDate}`}
+            >
+                Data: {formattedDate}
+            </Text>
+            {consult.type !== "default" && (
+                <Text
+                    style={StyleSheet.flatten([
+                        stylesConsult.evaluation,
+                        consult.type === "evaluation" && { backgroundColor: Colors.lightgreen }
+                    ])}
+                    testID="consult-evaluation"
+                    accessibilityRole="text"
+                    accessibilityLabel="Avaliação"
+                >
+                    Avaliação
+                </Text>
+            )}
         </View>
-    )
-}
+    );
+});
 
 const stylesConsult = StyleSheet.create({
     item: {

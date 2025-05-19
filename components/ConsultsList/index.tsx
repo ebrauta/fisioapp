@@ -1,20 +1,29 @@
 import { Colors } from "@/constants/Colors";
 import { LIST_ITEM_HEIGHT } from "@/constants/Extras";
 import { Consult } from "@/types/IConsult";
-import { useCallback } from "react";
+import { Patient } from "@/types/IPatient";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FormAddConsult } from "../FormAddConsult";
 import { UIButton } from "../UI/Button";
 import { ConsultListItem } from "./item";
 
 interface ConsultListProps {
-    patient?: string
+    patient: Patient
     consults: Consult[]
-    handleClick: () => void
+    handleClose: () => void
 }
 
-export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, handleClick }) => {
-    const handlePress = () => {
-        handleClick();
+export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, handleClose }) => {
+    const [showAdd, setShowAdd] = useState<boolean>(false)
+    const [consultList, setConsultList] = useState<Consult[]>([])
+
+    useEffect(() => {
+        if(consults) setConsultList(consults)
+    }, [consults])
+
+    const handleAdd = (patient: Patient) => {
+        setShowAdd(true)
     };
 
     const renderItem = useCallback(
@@ -29,10 +38,10 @@ export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, ha
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Consultas de {patient}</Text>
+            <Text style={styles.title}>Consultas de {patient?.name}</Text>
             <View style={styles.listContainer}>
                 <FlatList
-                    data={consults}
+                    data={consultList}
                     keyExtractor={keyExtractor}
                     renderItem={renderItem}
                     style={styles.container}
@@ -50,10 +59,17 @@ export const ConsultsList: React.FC<ConsultListProps> = ({ patient, consults, ha
                 />
             </View>
             <UIButton
+                label="Adicionar Consulta"
+                handleClick={() => handleAdd(patient)}
+            />
+            <UIButton
                 label="Voltar"
                 iconName="arrow-back-outline"
-                handleClick={handleClick}
+                handleClick={handleClose}
             />
+            {showAdd && (
+                <FormAddConsult patient={patient} handleClose={() => setShowAdd(false)} />
+            )}
         </SafeAreaView>
     )
 }

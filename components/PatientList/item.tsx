@@ -29,8 +29,7 @@ export const PatientListItem: React.FC<PatientItemProps> = ({ patient, handlePre
             setLastConsult(FilterConsults.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).pop())
         }
         fetchConsults()
-    }, []);
-
+    }, [ConsultsData]);
 
     const stylesPatient = StyleSheet.create({
         item: {

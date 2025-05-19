@@ -21,7 +21,7 @@ export default function PatientScreen() {
       setConsults(ConsultsData);
     };
     fetchConsults();
-  }, []);
+  }, [ConsultsData]);
 
   const handlePatientPress = (item: Patient) => {
     setShowConsults(true);
@@ -42,9 +42,9 @@ export default function PatientScreen() {
       <PatientList handleClick={handlePatientPress} />
       <UIButton label='Adicionar Paciente' handleClick={() => setShowAdd(true)} />
       {showAdd && <FormAddPatient handleClose={() => setShowAdd(false)}/>}
-      {showConsults && (
+      {showConsults && selectedPatient && (
         <Modal onDismiss={handleConsultPress}>
-          <ConsultsList patient={selectedPatient?.name} consults={consults} handleClick={handleConsultPress} />
+          <ConsultsList patient={selectedPatient} consults={consults} handleClose={handleConsultPress} />
         </Modal>
       )}
     </View>

@@ -16,7 +16,8 @@ export const FormAddPatient: React.FC<FormAddPatientProps> = ({ handleClose }) =
     const [name, setName] = useState<string>("")
     const [healthPlan, setHealthPlan] = useState<HealthPlan>()
 
-    const [healthPlantList, setHealthPlanList] = useState<HealthPlan[]>([])
+    const [healthPlanList, setHealthPlanList] = useState<HealthPlan[]>([])
+    const [modalVisible, setModalVisible] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchHealthPlan = async () => {
@@ -33,12 +34,7 @@ export const FormAddPatient: React.FC<FormAddPatientProps> = ({ handleClose }) =
     }, []);
 
     const handleChangePlan = (data: number) => {
-        let health;
-        if (data) {
-            health = healthPlantList.find((plan) => plan.id === data)
-        } else {
-            health = healthPlantList.find((plan) => plan.id === 1)
-        }
+        const health = healthPlanList.find((plan) => plan.id === data)
         setHealthPlan(health)
     }
 
@@ -53,23 +49,33 @@ export const FormAddPatient: React.FC<FormAddPatientProps> = ({ handleClose }) =
                 finished: false,
                 planId: healthPlan?.id
             })
+            setLoading(false)
+            handleClose()
         }, 3000)
-        setLoading(false)
-        handleClose()
     }
 
     return (
-        <Modal>
+        <Modal
+            visible={modalVisible}
+            onRequestClose={handleClose}
+            animationType="slide"
+            transparent={false}
+        >
             {loading && <Text>Salvando...</Text>}
             {!loading && (
                 <View style={style.container}>
                     <Text style={style.title}>Adicionar Paciente</Text>
                     <View style={style.inputGroup}>
                         <UIInputText label="Nome" handleChange={setName} value={name} />
-                        <UISelect label="Plano de Saúde" value={healthPlan?.name} options={healthPlantList} onChange={(e) => handleChangePlan(e)} />
+                        <UISelect label="Plano de Saúde" value={healthPlan?.name} options={healthPlanList} onChange={(e) => handleChangePlan(e)} />
                     </View>
                     <View style={style.buttonGroup}>
-                        <UIButton label="Salvar" iconName="save-outline" handleClick={handleSave} />
+                        <UIButton
+                          label="Salvar"
+                          iconName="save-outline"
+                          handleClick={handleSave}
+                          disabled={!name.trim() || !healthPlan}
+                        />
                         <UIButton label="Voltar" iconName="arrow-back-outline" handleClick={handleClose} />
                     </View>
                 </View>

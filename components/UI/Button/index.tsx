@@ -4,14 +4,20 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native"
 
 interface ButtonProps {
     label: string
-    iconName?: any
+    iconName?: keyof typeof Ionicons.glyphMap
     handleClick: () => void
 }
 
 export const UIButton: React.FC<ButtonProps> = ({ label, iconName, handleClick }) => {
     return (
-        <TouchableOpacity style={styles.button} onPress={handleClick}>
-            {iconName && <Ionicons name={iconName} size={28} style={styles.buttonText} />}
+        <TouchableOpacity
+            style={styles.button}
+            onPress={handleClick}
+            accessibilityRole="button"
+            accessibilityLabel={label}
+            activeOpacity={0.7}
+        >
+            {iconName && <Ionicons name={iconName} size={28} style={styles.icon} />}
             <Text style={styles.buttonText}>{label}</Text>
         </TouchableOpacity>
     )
@@ -27,7 +33,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 8,
         flexDirection: 'row',
-        gap: 10
+    },
+    icon: {
+        color: Colors.lightgreen,
+        marginRight: 10
     },
     buttonText: {
         color: Colors.lightgreen,

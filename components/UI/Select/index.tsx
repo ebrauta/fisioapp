@@ -2,57 +2,60 @@ import { Colors } from "@/constants/Colors";
 import { HealthPlan } from "@/types/IHealthPlan";
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface SelectProps {
+    label?: string;
     value?: string;
     onChange: (data: number) => void
     options: HealthPlan[]
 }
 
-export const UISelect: React.FC<SelectProps> = ({ value,  options, onChange }) => {
+export const UISelect: React.FC<SelectProps> = ({ label, value, options, onChange }) => {
     const [visible, setVisible] = useState<boolean>(false)
 
     return (
-        <View style={styles.container}>
-            <>
-                <TouchableOpacity style={styles.select} onPress={() => setVisible(true)}>
-                    <Text>{value ? value : "Selecione"}</Text>
-                    <Feather name="arrow-down" size={16} color="#000" />
-                </TouchableOpacity>
-                <Modal
-                    visible={visible}
-                    transparent={true}
-                    animationType="fade"
-                    onRequestClose={() => setVisible(false)}>
-                    <TouchableOpacity style={styles.modalContainer} activeOpacity={1}
-                        onPress={() => setVisible(false)}>
-                        <TouchableOpacity style={styles.modalContent} activeOpacity={1}>
-                            <FlatList
-                                contentContainerStyle={{ gap: 4 }}
-                                data={options}
-                                keyExtractor={(item) => item.name.toString()}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity
-                                        style={styles.option}
-                                        onPress={() => {
-                                            onChange(item.id)
-                                            setVisible(false)
-                                        }}>
-                                        <Text>{item.name}</Text>
-                                    </TouchableOpacity>
-                                )}></FlatList>
-                        </TouchableOpacity>
+        <>
+            <Text style={style.label}>{label}</Text>
+            <TouchableOpacity style={style.select} onPress={() => setVisible(true)}>
+                <Text style={style.selectText}>{value ? value : "Selecione"}</Text>
+                <Feather name="arrow-down" size={16} color={Colors.darkgreen} />
+            </TouchableOpacity>
+            <Modal
+                visible={visible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setVisible(false)}>
+                <TouchableOpacity style={style.modalContainer} activeOpacity={1}
+                    onPress={() => setVisible(false)}>
+                    <TouchableOpacity style={style.modalContent} activeOpacity={1}>
+                        <FlatList
+                            contentContainerStyle={{ gap: 4 }}
+                            data={options}
+                            keyExtractor={(item) => item.name.toString()}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    style={style.option}
+                                    onPress={() => {
+                                        onChange(item.id)
+                                        setVisible(false)
+                                    }}>
+                                    <Text style={style.selectText}>{item.name}</Text>
+                                </TouchableOpacity>
+                            )}></FlatList>
                     </TouchableOpacity>
-                </Modal>
-            </>
-        </View>
+                </TouchableOpacity>
+            </Modal>
+        </>
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        marginBottom: 16
+const style = StyleSheet.create({
+    label: {
+        color: Colors.darkgreen,
+        padding: 5,
+        fontWeight: 900,
+        fontSize: 16
     },
     errorText: {
         color: 'red',
@@ -60,12 +63,15 @@ const styles = StyleSheet.create({
     },
     select: {
         flexDirection: 'row',
-        height: 44,
-        backgroundColor: Colors.white,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        borderRadius: 4
+        borderWidth: 1,
+        borderColor: Colors.darkgreen,
+        borderRadius: 8,
+        padding: 10,
+        justifyContent: 'space-between'
+    },
+    selectText:{
+        fontWeight: 700,
+        color: Colors.darkgreen
     },
     modalContainer: {
         backgroundColor: 'rgba(0,0,0,0.5)',

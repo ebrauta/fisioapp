@@ -19,6 +19,7 @@ export const UIButton: React.FC<ButtonProps> = ({ label, iconName, handleClick }
 
 const styles = StyleSheet.create({
     button: {
+        flex: 1,
         margin: 5,
         padding: 20,
         backgroundColor: Colors.darkgreen,
